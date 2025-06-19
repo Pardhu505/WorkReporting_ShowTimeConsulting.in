@@ -137,8 +137,17 @@ const DailyWorkTracker = () => {
   const handleSubmit = async () => {
     // Validate required fields
     if (!formData.department || !formData.team || !formData.reportingManager ||
-        !formData.employeeName || !formData.date || !formData.tasks || !formData.status) {
+        !formData.employeeName || !formData.date) {
       setSuccessMessage('Please fill in all required fields.');
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+      return;
+    }
+
+    // Validate that all tasks have both task and status filled
+    const hasEmptyTasks = formData.tasks.some(task => !task.task || !task.status);
+    if (hasEmptyTasks) {
+      setSuccessMessage('Please fill in all task details and their statuses.');
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);
       return;
@@ -146,17 +155,20 @@ const DailyWorkTracker = () => {
 
     setIsLoading(true);
 
-    const newReport = {
+    // Create separate reports for each task
+    const newReports = formData.tasks.map((taskItem, index) => ({
       ...formData,
-      id: Date.now(),
+      tasks: taskItem.task,
+      status: taskItem.status,
+      id: Date.now() + index,
       timestamp: new Date().toISOString()
-    };
+    }));
 
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      setReports(prev => [...prev, newReport]);
+      setReports(prev => [...prev, ...newReports]);
 
       setSuccessMessage('Report submitted successfully!');
       setShowSuccess(true);
@@ -169,8 +181,7 @@ const DailyWorkTracker = () => {
         reportingManager: '',
         employeeName: '',
         date: new Date().toISOString().split('T')[0],
-        tasks: '',
-        status: ''
+        tasks: [{ task: '', status: '' }]
       });
 
     } catch (error) {

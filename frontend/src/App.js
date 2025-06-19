@@ -96,6 +96,31 @@ const DailyWorkTracker = () => {
     }
   };
 
+  const handleTaskChange = (index, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      tasks: prev.tasks.map((task, i) => 
+        i === index ? { ...task, [field]: value } : task
+      )
+    }));
+  };
+
+  const addNewTask = () => {
+    setFormData(prev => ({
+      ...prev,
+      tasks: [...prev.tasks, { task: '', status: '' }]
+    }));
+  };
+
+  const removeTask = (index) => {
+    if (formData.tasks.length > 1) {
+      setFormData(prev => ({
+        ...prev,
+        tasks: prev.tasks.filter((_, i) => i !== index)
+      }));
+    }
+  };
+
   const handleFilterChange = (field, value) => {
     setFilters(prev => ({...prev, [field]: value}));
 

@@ -13,15 +13,14 @@ const DailyWorkTracker = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
-  // Form state
+  // Form state with multiple tasks
   const [formData, setFormData] = useState({
     department: '',
     team: '',
     reportingManager: '',
     employeeName: '',
     date: new Date().toISOString().split('T')[0],
-    tasks: '',
-    status: ''
+    tasks: [{ task: '', status: '' }] // Array of tasks with individual statuses
   });
 
   // Filter state

@@ -166,7 +166,7 @@ frontend:
         agent: "main"
         comment: "Integrated Showtime Consulting logo and branding throughout the application"
 
-  - task: "Add confirmation dialogs and enhanced UX"
+  - task: "Add dynamic task fields with individual status"
     implemented: true
     working: true
     file: "App.js"
@@ -176,7 +176,19 @@ frontend:
     status_history:
       - working: true
         agent: "main"
-        comment: "Added confirmation dialogs, loading states, improved notifications, and better form interactions"
+        comment: "Successfully implemented dynamic task fields where users can add multiple tasks, each with its own status dropdown. Removed single status dropdown from top."
+
+  - task: "Add Team Summary Report tab"
+    implemented: true
+    working: true
+    file: "App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Successfully implemented hierarchical Team Summary Report showing Date → Department → Team → Manager → Employee → Tasks → Status structure"
 
 metadata:
   created_by: "main_agent"

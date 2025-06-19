@@ -918,7 +918,15 @@ const DailyWorkTracker = () => {
                 ) : (
                   <div className="space-y-6">
                     {Object.entries(
-                      reports.reduce((acc, report) => {
+                      reports
+                        .filter(report => {
+                          // Apply date filter if set
+                          if (filters.date && report.date !== filters.date) return false;
+                          // Apply department filter if set
+                          if (filters.department && report.department !== filters.department) return false;
+                          return true;
+                        })
+                        .reduce((acc, report) => {
                         const dateKey = new Date(report.date).toLocaleDateString();
                         if (!acc[dateKey]) acc[dateKey] = {};
                         

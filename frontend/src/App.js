@@ -479,7 +479,7 @@ const DailyWorkTracker = () => {
               className={`${getCardClasses()} rounded-3xl p-8 border`}
             >
               <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {/* Department */}
                   <motion.div 
                     className="group"
@@ -584,48 +584,88 @@ const DailyWorkTracker = () => {
                       className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all duration-300 ${getInputClasses()}`}
                     />
                   </motion.div>
-
-                  {/* Status */}
-                  <motion.div 
-                    className="group"
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-                      Status *
-                    </label>
-                    <select
-                      value={formData.status}
-                      onChange={(e) => handleInputChange('status', e.target.value)}
-                      required
-                      className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all duration-300 ${getInputClasses()}`}
-                    >
-                      <option value="">Select Status</option>
-                      {statusOptions.map(status => (
-                        <option key={status} value={status}>{status}</option>
-                      ))}
-                    </select>
-                  </motion.div>
                 </div>
 
-                {/* Task Details */}
-                <motion.div 
-                  className="group"
-                  whileHover={{ scale: 1.01 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-                    Task Details *
-                  </label>
-                  <textarea
-                    value={formData.tasks}
-                    onChange={(e) => handleInputChange('tasks', e.target.value)}
-                    placeholder="Enter detailed task description..."
-                    required
-                    rows={4}
-                    className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all duration-300 resize-vertical ${getInputClasses()}`}
-                  />
-                </motion.div>
+                {/* Dynamic Task Fields */}
+                <div className="space-y-4">
+                  <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                    Tasks & Status
+                  </h3>
+                  
+                  <AnimatePresence>
+                    {formData.tasks.map((taskItem, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3 }}
+                        className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end"
+                      >
+                        {/* Task Details */}
+                        <div className="md:col-span-2">
+                          <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                            Task Details {index + 1} *
+                          </label>
+                          <textarea
+                            value={taskItem.task}
+                            onChange={(e) => handleTaskChange(index, 'task', e.target.value)}
+                            placeholder="Enter detailed task description..."
+                            required
+                            rows={3}
+                            className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all duration-300 resize-vertical ${getInputClasses()}`}
+                          />
+                        </div>
+
+                        {/* Status */}
+                        <div className="flex flex-col">
+                          <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                            Status *
+                          </label>
+                          <div className="flex gap-2">
+                            <select
+                              value={taskItem.status}
+                              onChange={(e) => handleTaskChange(index, 'status', e.target.value)}
+                              required
+                              className={`flex-1 px-4 py-3 border-2 rounded-xl focus:outline-none transition-all duration-300 ${getInputClasses()}`}
+                            >
+                              <option value="">Select Status</option>
+                              {statusOptions.map(status => (
+                                <option key={status} value={status}>{status}</option>
+                              ))}
+                            </select>
+                            {formData.tasks.length > 1 && (
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                                type="button"
+                                onClick={() => removeTask(index)}
+                                className="px-3 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors"
+                              >
+                                <X className="w-4 h-4" />
+                              </motion.button>
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+
+                  {/* Add New Task Button */}
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="button"
+                    onClick={addNewTask}
+                    className={`w-full px-4 py-3 border-2 border-dashed rounded-xl font-semibold transition-all duration-300 ${
+                      isDarkMode 
+                        ? 'border-gray-600 text-gray-400 hover:border-indigo-400 hover:text-indigo-400' 
+                        : 'border-gray-300 text-gray-600 hover:border-indigo-500 hover:text-indigo-500'
+                    }`}
+                  >
+                    + Add New Task
+                  </motion.button>
+                </div>
 
                 {/* Submit Button */}
                 <div className="flex justify-center">

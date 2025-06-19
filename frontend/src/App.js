@@ -424,6 +424,21 @@ const DailyWorkTracker = () => {
                 <Users className="w-4 h-4 inline mr-2" />
                 RM's Team Report
               </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setActiveTab('teamSummary')}
+                className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                  activeTab === 'teamSummary'
+                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
+                    : isDarkMode
+                    ? 'bg-gray-700 text-indigo-300 border-2 border-indigo-400 hover:bg-gray-600'
+                    : 'bg-white text-indigo-500 border-2 border-indigo-500 hover:bg-indigo-50'
+                }`}
+              >
+                <Table className="w-4 h-4 inline mr-2" />
+                Summary Report
+              </motion.button>
             </div>
           </div>
         </motion.div>

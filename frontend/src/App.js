@@ -870,6 +870,45 @@ const DailyWorkTracker = () => {
                   Hierarchical view: Date → Department → Team → Manager → Employee → Tasks → Status
                 </p>
 
+                {/* Filter Section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  {/* Date Filter */}
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                      Filter by Date
+                    </label>
+                    <input
+                      type="date"
+                      value={filters.date || ''}
+                      onChange={(e) => handleFilterChange('date', e.target.value)}
+                      className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all duration-300 ${getInputClasses()}`}
+                    />
+                  </motion.div>
+
+                  {/* Department Filter */}
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                      Filter by Department
+                    </label>
+                    <select
+                      value={filters.department || ''}
+                      onChange={(e) => handleFilterChange('department', e.target.value)}
+                      className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all duration-300 ${getInputClasses()}`}
+                    >
+                      <option value="">All Departments</option>
+                      {Object.keys(departmentData).map(dept => (
+                        <option key={dept} value={dept}>{dept}</option>
+                      ))}
+                    </select>
+                  </motion.div>
+                </div>
+
                 {reports.length === 0 ? (
                   <div className={`text-center py-12 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                     <Table className="w-16 h-16 mx-auto mb-4 opacity-50" />

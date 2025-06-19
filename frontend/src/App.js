@@ -852,6 +852,118 @@ const DailyWorkTracker = () => {
               </div>
             </motion.div>
           )}
+
+          {activeTab === 'teamSummary' && (
+            <motion.div
+              key="teamSummary"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.4 }}
+              className={`${getCardClasses()} rounded-3xl p-8 border`}
+            >
+              <div className="mb-8">
+                <h2 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  Team Summary Report
+                </h2>
+                <p className={`text-sm mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  Hierarchical view: Date → Department → Team → Manager → Employee → Tasks → Status
+                </p>
+
+                {reports.length === 0 ? (
+                  <div className={`text-center py-12 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <Table className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                    <p className="text-lg font-medium mb-2">No reports available</p>
+                    <p>Submit some reports to see the team summary</p>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {Object.entries(
+                      reports.reduce((acc, report) => {
+                        const dateKey = new Date(report.date).toLocaleDateString();
+                        if (!acc[dateKey]) acc[dateKey] = {};
+                        
+                        if (!acc[dateKey][report.department]) acc[dateKey][report.department] = {};
+                        if (!acc[dateKey][report.department][report.team]) acc[dateKey][report.department][report.team] = {};
+                        if (!acc[dateKey][report.department][report.team][report.reportingManager]) {
+                          acc[dateKey][report.department][report.team][report.reportingManager] = {};
+                        }
+                        if (!acc[dateKey][report.department][report.team][report.reportingManager][report.employeeName]) {
+                          acc[dateKey][report.department][report.team][report.reportingManager][report.employeeName] = [];
+                        }
+                        
+                        acc[dateKey][report.department][report.team][report.reportingManager][report.employeeName].push({
+                          task: report.tasks,
+                          status: report.status,
+                          id: report.id
+                        });
+                        
+                        return acc;
+                      }, {})
+                    ).map(([date, departments]) => (
+                      <motion.div
+                        key={date}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className={`border rounded-2xl p-6 ${isDarkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50/50'}`}
+                      >
+                        <h3 className={`text-xl font-bold mb-4 flex items-center gap-2 ${isDarkMode ? 'text-indigo-300' : 'text-indigo-600'}`}>
+                          📅 {date}
+                        </h3>
+                        
+                        {Object.entries(departments).map(([department, teams]) => (
+                          <div key={department} className="mb-6">
+                            <h4 className={`text-lg font-semibold mb-3 flex items-center gap-2 ${isDarkMode ? 'text-blue-300' : 'text-blue-600'}`}>
+                              🏢 {department}
+                            </h4>
+                            
+                            {Object.entries(teams).map(([team, managers]) => (
+                              <div key={team} className="mb-4 ml-4">
+                                <h5 className={`text-md font-semibold mb-2 flex items-center gap-2 ${isDarkMode ? 'text-green-300' : 'text-green-600'}`}>
+                                  👥 {team}
+                                </h5>
+                                
+                                {Object.entries(managers).map(([manager, employees]) => (
+                                  <div key={manager} className="mb-3 ml-4">
+                                    <h6 className={`text-sm font-semibold mb-2 flex items-center gap-2 ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>
+                                      👨‍💼 {manager}
+                                    </h6>
+                                    
+                                    {Object.entries(employees).map(([employee, tasks]) => (
+                                      <div key={employee} className="mb-2 ml-4">
+                                        <div className={`text-sm font-medium mb-1 flex items-center gap-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                                          👤 {employee}
+                                        </div>
+                                        
+                                        <div className="ml-6 space-y-1">
+                                          {tasks.map((taskItem, index) => (
+                                            <div key={taskItem.id} className={`text-xs p-2 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-white'} border ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
+                                              <div className="flex items-start justify-between gap-2">
+                                                <span className={`flex-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                  📝 {taskItem.task}
+                                                </span>
+                                                <span className={`px-2 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${getStatusColor(taskItem.status)}`}>
+                                                  {taskItem.status}
+                                                </span>
+                                              </div>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                ))}
+                              </div>
+                            ))}
+                          </div>
+                        ))}
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
         </AnimatePresence>
 
         {/* Confirmation Dialog */}

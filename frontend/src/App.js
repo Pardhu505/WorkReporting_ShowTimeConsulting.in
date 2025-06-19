@@ -600,10 +600,10 @@ const DailyWorkTracker = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.3 }}
-                        className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end"
+                        className="grid grid-cols-1 md:grid-cols-4 gap-4 items-start"
                       >
                         {/* Task Details */}
-                        <div className="md:col-span-2">
+                        <div className="md:col-span-3">
                           <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
                             Task Details {index + 1} *
                           </label>
@@ -612,7 +612,7 @@ const DailyWorkTracker = () => {
                             onChange={(e) => handleTaskChange(index, 'task', e.target.value)}
                             placeholder="Enter detailed task description..."
                             required
-                            rows={3}
+                            rows={2}
                             className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all duration-300 resize-vertical ${getInputClasses()}`}
                           />
                         </div>
@@ -622,12 +622,12 @@ const DailyWorkTracker = () => {
                           <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
                             Status *
                           </label>
-                          <div className="flex gap-2">
+                          <div className="flex gap-2 h-full">
                             <select
                               value={taskItem.status}
                               onChange={(e) => handleTaskChange(index, 'status', e.target.value)}
                               required
-                              className={`flex-1 px-4 py-3 border-2 rounded-xl focus:outline-none transition-all duration-300 ${getInputClasses()}`}
+                              className={`flex-1 px-4 py-3 border-2 rounded-xl focus:outline-none transition-all duration-300 h-[52px] ${getInputClasses()}`}
                             >
                               <option value="">Select Status</option>
                               {statusOptions.map(status => (
@@ -640,7 +640,7 @@ const DailyWorkTracker = () => {
                                 whileTap={{ scale: 0.9 }}
                                 type="button"
                                 onClick={() => removeTask(index)}
-                                className="px-3 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors"
+                                className="px-3 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors h-[52px] flex items-center justify-center"
                               >
                                 <X className="w-4 h-4" />
                               </motion.button>

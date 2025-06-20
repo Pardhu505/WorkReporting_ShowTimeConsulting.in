@@ -13,6 +13,8 @@ const DailyWorkTracker = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
+  const [editedTaskText, setEditedTaskText] = useState('');
 
   // Form state with multiple tasks
   const [formData, setFormData] = useState({

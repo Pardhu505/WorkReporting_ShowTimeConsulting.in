@@ -1504,16 +1504,18 @@ const DailyWorkTracker = () => {
           )}
         </AnimatePresence>
 
-        {/* Confirmation Dialog */}
-        <ConfirmDialog
-          isOpen={showConfirmDialog}
-          onClose={() => setShowConfirmDialog(false)}
-          onConfirm={confirmSubmit}
-          title="Confirm Submission"
-          message="Are you sure you want to submit this report? Please review all details before confirming."
-        />
-      </div>
-    </div>
+            {/* Confirmation Dialog */}
+            <ConfirmDialog
+              isOpen={showConfirmDialog}
+              onClose={() => setShowConfirmDialog(false)}
+              onConfirm={confirmSubmit}
+              title="Confirm Submission"
+              message="Are you sure you want to submit this report? Please review all details before confirming."
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

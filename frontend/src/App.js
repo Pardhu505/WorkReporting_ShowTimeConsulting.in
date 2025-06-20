@@ -212,15 +212,33 @@ const DailyWorkTracker = () => {
 
   // Filter reports based on current filters
   useEffect(() => {
-    if (!filters.department && !filters.team && !filters.reportingManager) {
+    if (!filters.department && !filters.team && !filters.reportingManager && !filters.fromDate && !filters.toDate) {
       setFilteredReports(reports);
       return;
     }
 
     const filtered = reports.filter(report => {
-      return (!filters.department || report.department === filters.department) &&
-             (!filters.team || report.team === filters.team) &&
-             (!filters.reportingManager || report.reportingManager === filters.reportingManager);
+      // Department filter
+      if (filters.department && report.department !== filters.department) return false;
+      
+      // Team filter
+      if (filters.team && report.team !== filters.team) return false;
+      
+      // Reporting Manager filter
+      if (filters.reportingManager && report.reportingManager !== filters.reportingManager) return false;
+      
+      // Date range filter
+      const reportDate = new Date(report.date);
+      if (filters.fromDate) {
+        const fromDate = new Date(filters.fromDate);
+        if (reportDate < fromDate) return false;
+      }
+      if (filters.toDate) {
+        const toDate = new Date(filters.toDate);
+        if (reportDate > toDate) return false;
+      }
+      
+      return true;
     });
 
     setFilteredReports(filtered);

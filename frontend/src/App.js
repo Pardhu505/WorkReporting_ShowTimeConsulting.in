@@ -1382,19 +1382,36 @@ const DailyWorkTracker = () => {
                 </p>
 
                 {/* Filter Section */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  {/* Date Filter */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                  {/* From Date Filter */}
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
                     <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-                      Filter by Date
+                      From Date
                     </label>
                     <input
                       type="date"
-                      value={filters.date || ''}
-                      onChange={(e) => handleFilterChange('date', e.target.value)}
+                      value={filters.fromDate || ''}
+                      onChange={(e) => handleFilterChange('fromDate', e.target.value)}
+                      className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all duration-300 ${getInputClasses()}`}
+                    />
+                  </motion.div>
+
+                  {/* To Date Filter */}
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                      To Date
+                    </label>
+                    <input
+                      type="date"
+                      value={filters.toDate || ''}
+                      onChange={(e) => handleFilterChange('toDate', e.target.value)}
+                      min={filters.fromDate || ''}
                       className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all duration-300 ${getInputClasses()}`}
                     />
                   </motion.div>
@@ -1417,6 +1434,26 @@ const DailyWorkTracker = () => {
                         <option key={dept} value={dept}>{dept}</option>
                       ))}
                     </select>
+                  </motion.div>
+
+                  {/* Clear Filters Button */}
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="flex items-end"
+                  >
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setFilters({ department: '', team: '', reportingManager: '', fromDate: '', toDate: '' })}
+                      className={`w-full px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                        isDarkMode 
+                          ? 'bg-gray-700 text-gray-300 border-2 border-gray-600 hover:bg-gray-600' 
+                          : 'bg-gray-100 text-gray-700 border-2 border-gray-300 hover:bg-gray-200'
+                      }`}
+                    >
+                      Clear Filters
+                    </motion.button>
                   </motion.div>
                 </div>
 

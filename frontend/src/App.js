@@ -412,6 +412,277 @@ const DailyWorkTracker = () => {
     setEditedTaskText('');
   };
 
+  const navigateToApp = (tab = 'report') => {
+    setCurrentView('app');
+    setActiveTab(tab);
+  };
+
+  const navigateToLanding = () => {
+    setCurrentView('landing');
+  };
+
+  // Landing Page Component
+  const LandingPage = () => (
+    <div className={`min-h-screen transition-all duration-500 ${getThemeClasses()}`}>
+      <div className="max-w-6xl mx-auto p-6">
+        {/* Header with Theme Toggle */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className={`${getCardClasses()} rounded-3xl p-6 mb-8 border`}
+        >
+          <div className="flex justify-between items-center">
+            <div></div>
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 180 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={toggleTheme}
+              className={`p-3 rounded-full transition-all duration-300 ${
+                isDarkMode
+                  ? 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30'
+                  : 'bg-indigo-100 text-indigo-600 hover:bg-indigo-200'
+              }`}
+              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              <AnimatePresence mode="wait">
+                {isDarkMode ? (
+                  <motion.div
+                    key="sun"
+                    initial={{ rotate: -180, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 180, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Sun className="w-5 h-5" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="moon"
+                    initial={{ rotate: -180, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 180, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Moon className="w-5 h-5" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
+          </div>
+        </motion.div>
+
+        {/* Main Landing Content */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="text-center"
+        >
+          {/* Logo and Company Branding */}
+          <motion.div 
+            className="flex flex-col items-center mb-12"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <motion.div 
+              className="relative w-32 h-32 bg-white rounded-3xl flex items-center justify-center shadow-2xl mb-6 overflow-hidden"
+              whileHover={{ scale: 1.05, rotate: 3 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <img 
+                src="https://showtimeconsulting.in/images/settings/2fd13f50.png" 
+                alt="Showtime Consulting"
+                className="w-24 h-24 object-contain"
+              />
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 rounded-3xl"
+                animate={{ opacity: [0.5, 0.8, 0.5] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </motion.div>
+            
+            <motion.h1 
+              className={`text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent`}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              SHOWTIME
+            </motion.h1>
+            
+            <motion.p 
+              className={`text-xl md:text-2xl font-semibold mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+            >
+              CONSULTING
+            </motion.p>
+            
+            <motion.div
+              className={`w-24 h-1 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 mb-8`}
+              initial={{ width: 0 }}
+              animate={{ width: 96 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+            />
+          </motion.div>
+
+          {/* Welcome Message */}
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.9 }}
+            className="mb-12"
+          >
+            <h2 className={`text-3xl md:text-4xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              Welcome to the
+            </h2>
+            <h3 className={`text-2xl md:text-3xl font-semibold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent`}>
+              Daily Work Reporting Portal
+            </h3>
+            <p className={`text-lg md:text-xl max-w-2xl mx-auto leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              Streamline your daily work reporting with our professional, intuitive platform designed for efficient team management and progress tracking.
+            </p>
+          </motion.div>
+
+          {/* Navigation Cards */}
+          <motion.div
+            initial={{ y: 40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.1 }}
+            className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12"
+          >
+            {/* Daily Report Card */}
+            <motion.div
+              whileHover={{ scale: 1.05, y: -10 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigateToApp('report')}
+              className={`${getCardClasses()} p-8 rounded-2xl border cursor-pointer group`}
+            >
+              <motion.div
+                className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center group-hover:shadow-lg transition-all duration-300"
+                whileHover={{ rotate: 5 }}
+              >
+                <FileText className="w-8 h-8 text-white" />
+              </motion.div>
+              <h4 className={`text-xl font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Daily Report
+              </h4>
+              <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Submit your daily work reports with multiple tasks and status tracking
+              </p>
+            </motion.div>
+
+            {/* RM's Team Report Card */}
+            <motion.div
+              whileHover={{ scale: 1.05, y: -10 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigateToApp('summary')}
+              className={`${getCardClasses()} p-8 rounded-2xl border cursor-pointer group`}
+            >
+              <motion.div
+                className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-500 to-teal-600 rounded-2xl flex items-center justify-center group-hover:shadow-lg transition-all duration-300"
+                whileHover={{ rotate: 5 }}
+              >
+                <Users className="w-8 h-8 text-white" />
+              </motion.div>
+              <h4 className={`text-xl font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                RM's Team Report
+              </h4>
+              <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                View, filter, and manage team reports with editing capabilities
+              </p>
+            </motion.div>
+
+            {/* Summary Report Card */}
+            <motion.div
+              whileHover={{ scale: 1.05, y: -10 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigateToApp('teamSummary')}
+              className={`${getCardClasses()} p-8 rounded-2xl border cursor-pointer group`}
+            >
+              <motion.div
+                className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center group-hover:shadow-lg transition-all duration-300"
+                whileHover={{ rotate: 5 }}
+              >
+                <Table className="w-8 h-8 text-white" />
+              </motion.div>
+              <h4 className={`text-xl font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Summary Report
+              </h4>
+              <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Hierarchical team summary with PDF export functionality
+              </p>
+            </motion.div>
+          </motion.div>
+
+          {/* Features */}
+          <motion.div
+            initial={{ y: 40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.3 }}
+            className={`${getCardClasses()} rounded-2xl p-8 border max-w-4xl mx-auto`}
+          >
+            <h4 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              Platform Features
+            </h4>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="text-center">
+                <div className={`w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center ${isDarkMode ? 'bg-blue-900/50' : 'bg-blue-100'}`}>
+                  <CheckCircle className={`w-6 h-6 ${isDarkMode ? 'text-blue-300' : 'text-blue-600'}`} />
+                </div>
+                <h5 className={`font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  Easy Reporting
+                </h5>
+                <p className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  Simple and intuitive daily reporting interface
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className={`w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center ${isDarkMode ? 'bg-green-900/50' : 'bg-green-100'}`}>
+                  <Download className={`w-6 h-6 ${isDarkMode ? 'text-green-300' : 'text-green-600'}`} />
+                </div>
+                <h5 className={`font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  PDF Export
+                </h5>
+                <p className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  Professional PDF reports with hierarchical structure
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className={`w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center ${isDarkMode ? 'bg-purple-900/50' : 'bg-purple-100'}`}>
+                  <Edit2 className={`w-6 h-6 ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`} />
+                </div>
+                <h5 className={`font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  Live Editing
+                </h5>
+                <p className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  Edit and update reports in real-time
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className={`w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center ${isDarkMode ? 'bg-indigo-900/50' : 'bg-indigo-100'}`}>
+                  <Palette className={`w-6 h-6 ${isDarkMode ? 'text-indigo-300' : 'text-indigo-600'}`} />
+                </div>
+                <h5 className={`font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  Dark Mode
+                </h5>
+                <p className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  Professional light and dark themes
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+    </div>
+  );
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'Completed': return isDarkMode ? 'bg-green-900/50 text-green-300 border-green-700' : 'bg-green-100 text-green-800 border-green-200';

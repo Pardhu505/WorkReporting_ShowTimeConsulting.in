@@ -1481,10 +1481,20 @@ const DailyWorkTracker = () => {
                     {Object.entries(
                       reports
                         .filter(report => {
-                          // Apply date filter if set
-                          if (filters.date && report.date !== filters.date) return false;
                           // Apply department filter if set
                           if (filters.department && report.department !== filters.department) return false;
+                          
+                          // Apply date range filter if set
+                          const reportDate = new Date(report.date);
+                          if (filters.fromDate) {
+                            const fromDate = new Date(filters.fromDate);
+                            if (reportDate < fromDate) return false;
+                          }
+                          if (filters.toDate) {
+                            const toDate = new Date(filters.toDate);
+                            if (reportDate > toDate) return false;
+                          }
+                          
                           return true;
                         })
                         .reduce((acc, report) => {

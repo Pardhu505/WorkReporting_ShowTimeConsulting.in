@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, FileText, Table, Users, Moon, Sun, Palette, CheckCircle, AlertCircle, X } from 'lucide-react';
+import { Download, FileText, Table, Users, Moon, Sun, Palette, CheckCircle, AlertCircle, X, Edit2, Save, XCircle } from 'lucide-react';
+import jsPDF from 'jspdf';
 import './App.css';
 
 const DailyWorkTracker = () => {

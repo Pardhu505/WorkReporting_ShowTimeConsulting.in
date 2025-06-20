@@ -284,8 +284,20 @@ const DailyWorkTracker = () => {
   const exportToPDF = () => {
     const dataToExport = reports
       .filter(report => {
-        if (filters.date && report.date !== filters.date) return false;
+        // Department filter
         if (filters.department && report.department !== filters.department) return false;
+        
+        // Date range filter
+        const reportDate = new Date(report.date);
+        if (filters.fromDate) {
+          const fromDate = new Date(filters.fromDate);
+          if (reportDate < fromDate) return false;
+        }
+        if (filters.toDate) {
+          const toDate = new Date(filters.toDate);
+          if (reportDate > toDate) return false;
+        }
+        
         return true;
       });
     
@@ -309,8 +321,9 @@ const DailyWorkTracker = () => {
     pdf.setFont(undefined, 'normal');
     pdf.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, yPosition);
     yPosition += 5;
-    if (filters.date) {
-      pdf.text(`Filtered by Date: ${new Date(filters.date).toLocaleDateString()}`, 20, yPosition);
+    if (filters.fromDate || filters.toDate) {
+      const dateRange = `${filters.fromDate ? new Date(filters.fromDate).toLocaleDateString() : 'Start'} - ${filters.toDate ? new Date(filters.toDate).toLocaleDateString() : 'End'}`;
+      pdf.text(`Date Range: ${dateRange}`, 20, yPosition);
       yPosition += 5;
     }
     if (filters.department) {

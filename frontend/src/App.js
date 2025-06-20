@@ -55,28 +55,38 @@ const DailyWorkTracker = () => {
   // Data structure
   const departmentData = {
     "Soul Centre": {
-      "Soul Central": ["Atia", "Akhilesh Mishra"],
-      "Field Team": ["Siddharth Gautam", "Sai Kiran Gurram", "Himani Sehgal", "Pawan Beniwal"]
+      "Soul Central": ["Atia"],
+      "Field Team": ["Siddharth Gautam", "Sai Kiran Gurram", "Akhilesh Mishra"]
+    },
+    "Directors": {
+      "Director": ["Anant Tiwari"],
+      "Associate Director": ["Alimpan Banerjee"]
     },
     "Directors team": {
-      "Directors Team": ["Aditya Pandit", "Sravya", "Eshwar"]
+      "Directors Team": ["Himani Sehgal", "Pawan Beniwal", "Aditya Pandit", "Sravya", "Eshwar"]
     },
     "Campaign": {
       "Campaign": ["S S Manoharan"]
     },
     "Data": {
-      "Data": ["I Pardhasaradhi"]
+      "Data": ["T. Pardhasaradhi"]
     },
     "Media": {
       "Media": ["Aakanksha Tandon"]
     },
     "Research": {
-      "Research": ["P Srinath Rao"]
+      "Research": ["P. Srinath Rao"]
     },
     "DMC": {
-      "HIVE": ["Ruhi"],
+      "HIVE": ["Madhunisha and Apoorva"],
       "Digital Communication": ["Keerthana"],
       "Digital Production": ["Bapan"]
+    },
+    "HR": {
+      "HR": ["Tejaswini"]
+    },
+    "Admin": {
+      "Operations": ["Nikash"]
     }
   };
 

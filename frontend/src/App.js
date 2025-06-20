@@ -1003,9 +1003,46 @@ const DailyWorkTracker = () => {
                               </span>
                             </td>
                             <td className={`px-6 py-4 text-sm max-w-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>
-                              <div className="truncate" title={report.tasks}>
-                                {report.tasks.length > 100 ? `${report.tasks.substring(0, 100)}...` : report.tasks}
-                              </div>
+                              {editingTask === report.id ? (
+                                <div className="flex items-center gap-2">
+                                  <textarea
+                                    value={editedTaskText}
+                                    onChange={(e) => setEditedTaskText(e.target.value)}
+                                    className={`flex-1 px-2 py-1 text-xs border rounded resize-none ${getInputClasses()}`}
+                                    rows="2"
+                                  />
+                                  <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={() => saveEditTask(report.id)}
+                                    className="p-1 bg-green-500 text-white rounded hover:bg-green-600"
+                                  >
+                                    <Save className="w-3 h-3" />
+                                  </motion.button>
+                                  <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={cancelEditTask}
+                                    className="p-1 bg-gray-500 text-white rounded hover:bg-gray-600"
+                                  >
+                                    <XCircle className="w-3 h-3" />
+                                  </motion.button>
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-2">
+                                  <div className="truncate flex-1" title={report.tasks}>
+                                    {report.tasks.length > 100 ? `${report.tasks.substring(0, 100)}...` : report.tasks}
+                                  </div>
+                                  <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={() => startEditTask(report.id, report.tasks)}
+                                    className="p-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                  >
+                                    <Edit2 className="w-3 h-3" />
+                                  </motion.button>
+                                </div>
+                              )}
                             </td>
                           </motion.tr>
                         ))

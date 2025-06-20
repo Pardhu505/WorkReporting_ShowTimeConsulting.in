@@ -1073,6 +1073,19 @@ const DailyWorkTracker = () => {
                   </motion.div>
                 </div>
 
+                {/* Export Button */}
+                <div className="flex gap-3 mb-6">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={exportToPDF}
+                    className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors shadow-lg"
+                  >
+                    <Download className="w-4 h-4" />
+                    Export PDF
+                  </motion.button>
+                </div>
+
                 {reports.length === 0 ? (
                   <div className={`text-center py-12 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                     <Table className="w-16 h-16 mx-auto mb-4 opacity-50" />

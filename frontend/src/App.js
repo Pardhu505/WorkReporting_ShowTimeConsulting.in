@@ -5,6 +5,7 @@ import jsPDF from 'jspdf';
 import './App.css';
 
 const DailyWorkTracker = () => {
+  const [currentView, setCurrentView] = useState('landing'); // landing, app
   const [activeTab, setActiveTab] = useState('report');
   const [reports, setReports] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);

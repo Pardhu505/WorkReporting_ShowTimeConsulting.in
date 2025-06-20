@@ -755,129 +755,134 @@ const DailyWorkTracker = () => {
   };
 
   return (
-    <div className={`min-h-screen transition-all duration-500 ${getThemeClasses()}`}>
-      <div className="max-w-7xl mx-auto p-6">
-        {/* Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className={`${getCardClasses()} rounded-3xl p-6 mb-8 border`}
-        >
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+    <>
+      {currentView === 'landing' ? (
+        <LandingPage />
+      ) : (
+        <div className={`min-h-screen transition-all duration-500 ${getThemeClasses()}`}>
+          <div className="max-w-7xl mx-auto p-6">
+            {/* Header */}
             <motion.div 
-              className="flex items-center gap-4"
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300 }}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className={`${getCardClasses()} rounded-3xl p-6 mb-8 border`}
             >
-              {/* Showtime Logo */}
-              <motion.div 
-                className="relative w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg overflow-hidden"
-                whileHover={{ rotate: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <img 
-                  src="https://showtimeconsulting.in/images/settings/2fd13f50.png" 
-                  alt="Showtime Consulting"
-                  className="w-12 h-12 object-contain"
-                />
-              </motion.div>
-              <div>
-                <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>SHOWTIME</h1>
-                <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>CONSULTING</p>
-              </div>
-              <div className={`hidden lg:block h-8 w-px ${isDarkMode ? 'bg-gray-600' : 'bg-gray-300'} mx-2`}></div>
-              <div className="hidden lg:block">
-                <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>Daily Work Report</h2>
+              <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+                <motion.div 
+                  className="flex items-center gap-4 cursor-pointer"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  onClick={navigateToLanding}
+                >
+                  {/* Showtime Logo */}
+                  <motion.div 
+                    className="relative w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg overflow-hidden"
+                    whileHover={{ rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <img 
+                      src="https://showtimeconsulting.in/images/settings/2fd13f50.png" 
+                      alt="Showtime Consulting"
+                      className="w-12 h-12 object-contain"
+                    />
+                  </motion.div>
+                  <div>
+                    <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>SHOWTIME</h1>
+                    <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>CONSULTING</p>
+                  </div>
+                  <div className={`hidden lg:block h-8 w-px ${isDarkMode ? 'bg-gray-600' : 'bg-gray-300'} mx-2`}></div>
+                  <div className="hidden lg:block">
+                    <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>Daily Work Report</h2>
+                  </div>
+                </motion.div>
+
+                <div className="flex items-center gap-3">
+                  {/* Theme Toggle Button */}
+                  <motion.button
+                    whileHover={{ scale: 1.1, rotate: 180 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={toggleTheme}
+                    className={`p-3 rounded-full transition-all duration-300 ${
+                      isDarkMode
+                        ? 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30'
+                        : 'bg-indigo-100 text-indigo-600 hover:bg-indigo-200'
+                    }`}
+                    title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                  >
+                    <AnimatePresence mode="wait">
+                      {isDarkMode ? (
+                        <motion.div
+                          key="sun"
+                          initial={{ rotate: -180, opacity: 0 }}
+                          animate={{ rotate: 0, opacity: 1 }}
+                          exit={{ rotate: 180, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <Sun className="w-5 h-5" />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="moon"
+                          initial={{ rotate: -180, opacity: 0 }}
+                          animate={{ rotate: 0, opacity: 1 }}
+                          exit={{ rotate: 180, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <Moon className="w-5 h-5" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
+
+                  <motion.button
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setActiveTab('report')}
+                    className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                      activeTab === 'report'
+                        ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
+                        : isDarkMode
+                        ? 'bg-gray-700 text-indigo-300 border-2 border-indigo-400 hover:bg-gray-600'
+                        : 'bg-white text-indigo-500 border-2 border-indigo-500 hover:bg-indigo-50'
+                    }`}
+                  >
+                    <FileText className="w-4 h-4 inline mr-2" />
+                    Daily Report
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setActiveTab('summary')}
+                    className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                      activeTab === 'summary'
+                        ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
+                        : isDarkMode
+                        ? 'bg-gray-700 text-indigo-300 border-2 border-indigo-400 hover:bg-gray-600'
+                        : 'bg-white text-indigo-500 border-2 border-indigo-500 hover:bg-indigo-50'
+                    }`}
+                  >
+                    <Users className="w-4 h-4 inline mr-2" />
+                    RM's Team Report
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setActiveTab('teamSummary')}
+                    className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                      activeTab === 'teamSummary'
+                        ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
+                        : isDarkMode
+                        ? 'bg-gray-700 text-indigo-300 border-2 border-indigo-400 hover:bg-gray-600'
+                        : 'bg-white text-indigo-500 border-2 border-indigo-500 hover:bg-indigo-50'
+                    }`}
+                  >
+                    <Table className="w-4 h-4 inline mr-2" />
+                    Summary Report
+                  </motion.button>
+                </div>
               </div>
             </motion.div>
-
-            <div className="flex items-center gap-3">
-              {/* Theme Toggle Button */}
-              <motion.button
-                whileHover={{ scale: 1.1, rotate: 180 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={toggleTheme}
-                className={`p-3 rounded-full transition-all duration-300 ${
-                  isDarkMode
-                    ? 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30'
-                    : 'bg-indigo-100 text-indigo-600 hover:bg-indigo-200'
-                }`}
-                title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              >
-                <AnimatePresence mode="wait">
-                  {isDarkMode ? (
-                    <motion.div
-                      key="sun"
-                      initial={{ rotate: -180, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 180, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <Sun className="w-5 h-5" />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="moon"
-                      initial={{ rotate: -180, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 180, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <Moon className="w-5 h-5" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setActiveTab('report')}
-                className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
-                  activeTab === 'report'
-                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
-                    : isDarkMode
-                    ? 'bg-gray-700 text-indigo-300 border-2 border-indigo-400 hover:bg-gray-600'
-                    : 'bg-white text-indigo-500 border-2 border-indigo-500 hover:bg-indigo-50'
-                }`}
-              >
-                <FileText className="w-4 h-4 inline mr-2" />
-                Daily Report
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setActiveTab('summary')}
-                className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
-                  activeTab === 'summary'
-                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
-                    : isDarkMode
-                    ? 'bg-gray-700 text-indigo-300 border-2 border-indigo-400 hover:bg-gray-600'
-                    : 'bg-white text-indigo-500 border-2 border-indigo-500 hover:bg-indigo-50'
-                }`}
-              >
-                <Users className="w-4 h-4 inline mr-2" />
-                RM's Team Report
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setActiveTab('teamSummary')}
-                className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
-                  activeTab === 'teamSummary'
-                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg'
-                    : isDarkMode
-                    ? 'bg-gray-700 text-indigo-300 border-2 border-indigo-400 hover:bg-gray-600'
-                    : 'bg-white text-indigo-500 border-2 border-indigo-500 hover:bg-indigo-50'
-                }`}
-              >
-                <Table className="w-4 h-4 inline mr-2" />
-                Summary Report
-              </motion.button>
-            </div>
-          </div>
-        </motion.div>
 
         {/* Success Message */}
         <AnimatePresence>

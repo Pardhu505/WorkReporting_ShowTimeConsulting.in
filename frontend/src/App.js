@@ -31,7 +31,9 @@ const DailyWorkTracker = () => {
   const [filters, setFilters] = useState({
     department: '',
     team: '',
-    reportingManager: ''
+    reportingManager: '',
+    fromDate: '',
+    toDate: ''
   });
 
   const toggleTheme = () => {

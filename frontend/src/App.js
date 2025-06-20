@@ -260,6 +260,157 @@ const DailyWorkTracker = () => {
     a.click();
   };
 
+  const exportToPDF = () => {
+    const dataToExport = reports
+      .filter(report => {
+        if (filters.date && report.date !== filters.date) return false;
+        if (filters.department && report.department !== filters.department) return false;
+        return true;
+      });
+    
+    if (dataToExport.length === 0) {
+      alert('No data to export');
+      return;
+    }
+
+    const pdf = new jsPDF();
+    const pageHeight = pdf.internal.pageSize.height;
+    let yPosition = 20;
+
+    // Title
+    pdf.setFontSize(16);
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Team Summary Report', 20, yPosition);
+    yPosition += 10;
+
+    // Date and filters info
+    pdf.setFontSize(10);
+    pdf.setFont(undefined, 'normal');
+    pdf.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, yPosition);
+    yPosition += 5;
+    if (filters.date) {
+      pdf.text(`Filtered by Date: ${new Date(filters.date).toLocaleDateString()}`, 20, yPosition);
+      yPosition += 5;
+    }
+    if (filters.department) {
+      pdf.text(`Filtered by Department: ${filters.department}`, 20, yPosition);
+      yPosition += 5;
+    }
+    yPosition += 10;
+
+    // Group data hierarchically
+    const groupedData = dataToExport.reduce((acc, report) => {
+      const dateKey = new Date(report.date).toLocaleDateString();
+      if (!acc[dateKey]) acc[dateKey] = {};
+      if (!acc[dateKey][report.department]) acc[dateKey][report.department] = {};
+      if (!acc[dateKey][report.department][report.team]) acc[dateKey][report.department][report.team] = {};
+      if (!acc[dateKey][report.department][report.team][report.reportingManager]) {
+        acc[dateKey][report.department][report.team][report.reportingManager] = {};
+      }
+      if (!acc[dateKey][report.department][report.team][report.reportingManager][report.employeeName]) {
+        acc[dateKey][report.department][report.team][report.reportingManager][report.employeeName] = [];
+      }
+      acc[dateKey][report.department][report.team][report.reportingManager][report.employeeName].push({
+        task: report.tasks,
+        status: report.status
+      });
+      return acc;
+    }, {});
+
+    // Generate PDF content
+    Object.entries(groupedData).forEach(([date, departments]) => {
+      if (yPosition > pageHeight - 40) {
+        pdf.addPage();
+        yPosition = 20;
+      }
+      
+      pdf.setFontSize(12);
+      pdf.setFont(undefined, 'bold');
+      pdf.text(`Date: ${date}`, 20, yPosition);
+      yPosition += 8;
+
+      Object.entries(departments).forEach(([department, teams]) => {
+        if (yPosition > pageHeight - 30) {
+          pdf.addPage();
+          yPosition = 20;
+        }
+        
+        pdf.setFontSize(10);
+        pdf.setFont(undefined, 'bold');
+        pdf.text(`  Department: ${department}`, 25, yPosition);
+        yPosition += 6;
+
+        Object.entries(teams).forEach(([team, managers]) => {
+          if (yPosition > pageHeight - 25) {
+            pdf.addPage();
+            yPosition = 20;
+          }
+          
+          pdf.setFont(undefined, 'normal');
+          pdf.text(`    Team: ${team}`, 30, yPosition);
+          yPosition += 5;
+
+          Object.entries(managers).forEach(([manager, employees]) => {
+            if (yPosition > pageHeight - 20) {
+              pdf.addPage();
+              yPosition = 20;
+            }
+            
+            pdf.text(`      Manager: ${manager}`, 35, yPosition);
+            yPosition += 5;
+
+            Object.entries(employees).forEach(([employee, tasks]) => {
+              if (yPosition > pageHeight - 15) {
+                pdf.addPage();
+                yPosition = 20;
+              }
+              
+              pdf.text(`        Employee: ${employee}`, 40, yPosition);
+              yPosition += 4;
+
+              tasks.forEach((taskItem, index) => {
+                if (yPosition > pageHeight - 10) {
+                  pdf.addPage();
+                  yPosition = 20;
+                }
+                
+                const taskText = `          Task: ${taskItem.task.substring(0, 60)}${taskItem.task.length > 60 ? '...' : ''}`;
+                const statusText = `Status: ${taskItem.status}`;
+                
+                pdf.text(taskText, 45, yPosition);
+                yPosition += 4;
+                pdf.text(`          ${statusText}`, 45, yPosition);
+                yPosition += 6;
+              });
+            });
+          });
+        });
+      });
+    });
+
+    pdf.save('team_summary_report.pdf');
+  };
+
+  const startEditTask = (reportId, currentTask) => {
+    setEditingTask(reportId);
+    setEditedTaskText(currentTask);
+  };
+
+  const saveEditTask = (reportId) => {
+    setReports(prev => prev.map(report => 
+      report.id === reportId 
+        ? { ...report, tasks: editedTaskText }
+        : report
+    ));
+    setEditingTask(null);
+    setEditedTaskText('');
+  };
+
+  const cancelEditTask = () => {
+    setEditingTask(null);
+    setEditedTaskText('');
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'Completed': return isDarkMode ? 'bg-green-900/50 text-green-300 border-green-700' : 'bg-green-100 text-green-800 border-green-200';
